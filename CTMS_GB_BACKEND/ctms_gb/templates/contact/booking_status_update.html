@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Status Update</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        .email-container {
+            background-color: #ffffff;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px 10px 0 0;
+            text-align: center;
+            margin: -30px -30px 30px -30px;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin: 5px 0;
+        }
+        .status-confirmed {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .status-cancelled {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .status-pending {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        .info-card {
+            background-color: #f8f9fa;
+            border-left: 4px solid #007bff;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .info-row:last-child {
+            border-bottom: none;
+        }
+        .info-label {
+            font-weight: 600;
+            color: #666;
+        }
+        .info-value {
+            color: #333;
+            font-weight: 500;
+        }
+        .highlight {
+            background-color: #e7f3ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            border-left: 4px solid #007bff;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #666;
+            font-size: 14px;
+        }
+        .button {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        @media (max-width: 600px) {
+            .email-container {
+                padding: 15px;
+            }
+            .header {
+                padding: 15px;
+                margin: -15px -15px 15px -15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="header">
+            <h1>📧 Booking Status Update</h1>
+            <p>Dear {{ passenger_name }}, your booking status has been updated</p>
+        </div>
+        
+        <div class="highlight">
+            <h2 style="margin-top: 0; color: #007bff;">
+                {% if new_status == 'CONFIRMED' %}
+                    🎉 Booking Confirmed!
+                {% elif new_status == 'CANCELLED' %}
+                    ❌ Booking Cancelled
+                {% elif new_status == 'RESERVED' %}
+                    📅 Booking Reserved
+                {% elif new_status == 'COMPLETED' %}
+                    ✅ Journey Completed
+                {% else %}
+                    🔄 Status Updated
+                {% endif %}
+            </h2>
+            
+            <div class="status-badge 
+                {% if new_status == 'CONFIRMED' %}status-confirmed
+                {% elif new_status == 'CANCELLED' %}status-cancelled
+                {% else %}status-pending{% endif %}">
+                {{ new_status }}
+            </div>
+            
+            {% if new_payment_status != 'N/A' %}
+                <div class="status-badge 
+                    {% if new_payment_status == 'PAID' %}status-confirmed
+                    {% elif new_payment_status == 'UNPAID' %}status-pending
+                    {% else %}status-cancelled{% endif %}"
+                    style="margin-left: 10px;">
+                    Payment: {{ new_payment_status }}
+                </div>
+            {% endif %}
+        </div>
+        
+        <div class="info-card">
+            <h3 style="margin-top: 0; color: #333;">Booking Details</h3>
+            
+            <div class="info-row">
+                <span class="info-label">Booking ID:</span>
+                <span class="info-value"><strong>{{ booking_id }}</strong></span>
+            </div>
+            
+            <div class="info-row">
+                <span class="info-label">Vehicle Number:</span>
+                <span class="info-value">{{ vehicle_number }}</span>
+            </div>
+            
+            <div class="info-row">
+                <span class="info-label">Route:</span>
+                <span class="info-value">{{ route }}</span>
+            </div>
+            
+            <div class="info-row">
+                <span class="info-label">Date & Time:</span>
+                <span class="info-value">{{ date }} at {{ time }}</span>
+            </div>
+            
+            {% if seats != 'N/A' and seats != 'Full Vehicle' %}
+            <div class="info-row">
+                <span class="info-label">Seats:</span>
+                <span class="info-value">{{ seats }}</span>
+            </div>
+            {% endif %}
+            
+            <div class="info-row">
+                <span class="info-label">Amount:</span>
+                <span class="info-value"><strong>Rs. {{ amount }}</strong></span>
+            </div>
+            
+            <div class="info-row">
+                <span class="info-label">Booking Type:</span>
+                <span class="info-value">{{ booking_type }}</span>
+            </div>
+        </div>
+        
+        {% if new_status == 'CONFIRMED' %}
+        <div style="background-color: #f0fff4; padding: 15px; border-radius: 5px; margin: 20px 0;">
+            <h3 style="color: #155724; margin-top: 0;">🎫 Next Steps</h3>
+            <p>Your booking has been confirmed! Please:</p>
+            <ol>
+                <li>Arrive at the departure point 30 minutes before scheduled time</li>
+                <li>Carry your CNIC/NICOP for verification</li>
+                <li>Show this email or booking ID to the driver</li>
+                <li>For ticket, login to your account or contact support</li>
+            </ol>
+        </div>
+        
+        <div style="text-align: center; margin: 25px 0;">
+            <a href="{{ site_url }}/my-bookings" class="button">View Your Booking</a>
+        </div>
+        {% elif new_status == 'CANCELLED' %}
+        <div style="background-color: #fff5f5; padding: 15px; border-radius: 5px; margin: 20px 0;">
+            <h3 style="color: #c53030; margin-top: 0;">⚠️ Cancellation Note</h3>
+            <p>Your booking has been cancelled. If this was unexpected or if you need a refund, please contact our support team.</p>
+            <p>Refunds (if applicable) will be processed within 5-7 business days.</p>
+        </div>
+        {% endif %}
+        
+        <div style="margin: 25px 0; padding: 15px; background-color: #f8f9fa; border-radius: 5px;">
+            <h4 style="margin-top: 0; color: #333;">📞 Need Help?</h4>
+            <p>Our customer support team is here to assist you:</p>
+            <p>📧 Email: {{ support_email }}</p>
+            <p>📞 Phone: {{ company_phone }}</p>
+            <p>📍 Address: {{ company_address }}</p>
+        </div>
+        
+        <div class="footer">
+            <p>This is an automated email from {{ company_name }}.</p>
+            <p>Please do not reply to this email.</p>
+            <p>© {{ current_date.split(', ')[1] }} {{ company_name }}. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>

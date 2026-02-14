@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>New Contact Form Submission</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background-color: #f8f9fa; padding: 15px; border-radius: 5px; }
+        .details { background-color: #fff; border: 1px solid #dee2e6; padding: 20px; border-radius: 5px; margin: 20px 0; }
+        .field { margin-bottom: 10px; }
+        .label { font-weight: bold; color: #495057; }
+        .value { color: #212529; }
+        .footer { margin-top: 30px; padding-top: 20px; border-top: 1px solid #dee2e6; color: #6c757d; font-size: 12px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2>New Contact Form Submission</h2>
+            <p>A new message has been submitted via the contact form.</p>
+        </div>
+        
+        <div class="details">
+            <div class="field">
+                <span class="label">Name:</span>
+                <span class="value">{{ submission.name }}</span>
+            </div>
+            
+            <div class="field">
+                <span class="label">Email:</span>
+                <span class="value">{{ submission.email }}</span>
+            </div>
+            
+            <div class="field">
+                <span class="label">Category:</span>
+                <span class="value">{{ submission.get_category_display }}</span>
+            </div>
+            
+            <div class="field">
+                <span class="label">Subject:</span>
+                <span class="value">{{ submission.subject }}</span>
+            </div>
+            
+            <div class="field">
+                <span class="label">Message:</span>
+                <div class="value" style="white-space: pre-wrap; background-color: #f8f9fa; padding: 10px; border-radius: 3px; margin-top: 5px;">
+                    {{ submission.message }}
+                </div>
+            </div>
+            
+            <div class="field">
+                <span class="label">Submitted at:</span>
+                <span class="value">{{ submission.created_at|date:"F d, Y H:i" }}</span>
+            </div>
+        </div>
+        
+        <div style="margin: 20px 0;">
+            <a href="{{ admin_url }}" style="background-color: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 4px;">
+                View in Admin Panel
+            </a>
+        </div>
+        
+        <div class="footer">
+            <p>This is an automated notification from {{ site_name }}.</p>
+            <p>© {{ current_year }} {{ site_name }}. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>

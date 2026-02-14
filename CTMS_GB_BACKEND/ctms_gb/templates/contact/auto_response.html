@@ -1,0 +1,52 @@
+<!-- templates/contact/auto_response.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background: #16a34a; color: white; padding: 20px; text-align: center; }
+        .content { padding: 20px; background: #f9fafb; }
+        .footer { text-align: center; padding: 20px; color: #6b7280; font-size: 12px; }
+        .contact-info { background: white; padding: 15px; border-radius: 8px; margin: 15px 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2>Thank You for Contacting {{ site_name }}</h2>
+        </div>
+        
+        <div class="content">
+            <p>Dear <strong>{{ name }}</strong>,</p>
+            
+            <p>Thank you for reaching out to us regarding <strong>"{{ subject }}"</strong>. 
+            We have received your {{ category }} inquiry and our team will review it shortly.</p>
+            
+            <div class="contact-info">
+                <h3>What happens next?</h3>
+                <ul>
+                    <li>Our {{ category }} team will review your inquiry</li>
+                    <li>You will receive a personalized response within 24-48 hours</li>
+                    <li>For urgent matters, please call our support line</li>
+                </ul>
+            </div>
+            
+            <div class="contact-info">
+                <h3>Need immediate assistance?</h3>
+                <p><strong>Email:</strong> {{ support_email }}</p>
+                <p><strong>Phone:</strong> +92 300 1234567 (24/7 Emergency)</p>
+                <p><strong>Hours:</strong> Monday - Saturday, 8:00 AM - 8:00 PM</p>
+            </div>
+            
+            <p>Best regards,<br>
+            <strong>The {{ site_name }} Team</strong></p>
+        </div>
+        
+        <div class="footer">
+            <p>This is an automated response. Please do not reply to this email.</p>
+            <p>&copy; {{ current_year }} {{ site_name }}. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>
